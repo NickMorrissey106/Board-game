@@ -1,0 +1,52 @@
+import random
+
+def roll_dice():
+    return random.randint(1, 6)
+
+def move_player(current_position, roll):
+    new_position = current_position + roll
+
+    push_back_squares = [10, 20, 30, 40, 50, 60, 70, 80, 90]
+    
+    # Check if the player lands on a push back square
+    if new_position in push_back_squares:
+        print("Oops! You landed on a push back square.")
+        if new_position - 3 > 0:
+            new_position -= 3
+        else:
+            new_position = 1
+        print("You moved back 3 spaces. You are now at position", new_position)
+    else:
+        # Check if the player is within 6 spaces of a push back square
+        within_range = False
+        for square in push_back_squares:
+            distance = abs(new_position - square)
+            if distance <= 6:
+                print("Warning! You are", distance, "spaces away from a push back square.")
+                within_range = True
+                break
+
+        if not within_range:
+            print("You are now at position", new_position)
+
+    # Check if the new position exceeds the board limit
+    if new_position > 100:
+        new_position = 100
+    
+    return new_position
+
+# Main game loop
+def main():
+    position = 1
+
+    while position < 100:
+        input("Press Enter to roll the dice...")
+        roll = roll_dice()
+        print("You rolled a", roll)
+        position = move_player(position, roll)
+        print("You are now on position", position)
+
+    print("Congratulations! You reached the end of the board.")
+
+if __name__ == "__main__":
+    main()
